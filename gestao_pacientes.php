@@ -13,12 +13,31 @@ if (isset($_GET['excluir'])) {
     }
 }
 
-// Consulta SQL para buscar todos os pacientes
-try {
-    $stmt = $pdo->query("SELECT * FROM pacientes ORDER BY nome ASC");
-    $pacientes = $stmt->fetchAll(); // Busca os dados
-} catch (Exception $e) {
-    die("Erro ao buscar pacientes: " . $e->getMessage());
+// Variável para armazenar pacientes encontrados
+$pacientes = [];
+
+// Processa a busca se houver termo enviado via GET
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $search = $_GET['search'];
+    try {
+        // Busca por nome ou ID
+        $stmt = $pdo->prepare("SELECT * FROM pacientes WHERE nome LIKE :search OR id_paciente = :id ORDER BY nome ASC");
+        $stmt->execute([
+            'search' => '%' . $search . '%', // Busca parcial no nome
+            'id' => is_numeric($search) ? intval($search) : null // Busca exata no ID
+        ]);
+        $pacientes = $stmt->fetchAll();
+    } catch (Exception $e) {
+        echo "<p class='error'>Erro ao buscar pacientes: " . $e->getMessage() . "</p>";
+    }
+} else {
+    // Consulta SQL para buscar todos os pacientes caso não haja busca
+    try {
+        $stmt = $pdo->query("SELECT * FROM pacientes ORDER BY nome ASC");
+        $pacientes = $stmt->fetchAll(); // Busca os dados
+    } catch (Exception $e) {
+        die("Erro ao buscar pacientes: " . $e->getMessage());
+    }
 }
 ?>
 
@@ -40,8 +59,14 @@ try {
             <a class="btn btn-add" href="cadastro_pacientes.php">Cadastrar Paciente</a>
         </div>
 
+        <!-- Formulário de busca -->
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Buscar por nome ou ID" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+            <button type="submit" class="btn btn-search">Buscar</button>
+        </form>
+
         <?php if (empty($pacientes)): ?>
-            <p class="error">Nenhum paciente cadastrado no sistema.</p>
+            <p class="error">Nenhum paciente encontrado.</p>
         <?php else: ?>
             <table class="table">
                 <thead>

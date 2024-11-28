@@ -105,3 +105,12 @@ input, select, textarea {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
+.logo {
+    max-width: 100px; /* Ajuste a largura máxima */
+    height: auto; /* Mantém a proporção da imagem */
+    margin-bottom: 20px; /* Espaçamento abaixo da imagem */
+    display: block; /* Garante que a imagem seja tratada como bloco */
+    margin-left: auto; /* Centraliza horizontalmente */
+    margin-right: auto; /* Centraliza horizontalmente */
+}

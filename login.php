@@ -9,6 +9,7 @@
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #58936d, #416e52);
+            flex-direction: column;
             margin: 0;
             display: flex;
             align-items: center;
@@ -54,10 +55,20 @@
             color: red;
             font-size: 14px;
         }
+        
+        .logo {
+            max-width: 200px; /* Ajuste a largura máxima */
+            height: auto; /* Mantém a proporção da imagem */
+            margin-bottom: 10px; /* Espaçamento abaixo da imagem */
+            display: block; /* Garante que a imagem seja tratada como bloco */
+            margin-left: auto; /* Centraliza horizontalmente */
+            margin-right: auto; /* Centraliza horizontalmente */
+}
     </style>
 </head>
 <body>
-    <div class="container">
+    <img src="img/logomedsys.png" alt="Logo" class="logo">
+    <div class="container">      
         <h1>Login</h1>
         <?php
         require 'config.php';
